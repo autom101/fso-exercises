@@ -8,6 +8,16 @@ const Button = ({ text, handleClick }) => {
   );
 };
 
+const StatisticsLine = ({ text, value }) => {
+  return (
+    <>
+      <p>
+        <b>{text}</b>: {value}
+      </p>
+    </>
+  );
+};
+
 const Statistics = ({ statistics }) => {
   const {
     statGood,
@@ -17,25 +27,25 @@ const Statistics = ({ statistics }) => {
     statTotal,
     getPositive,
   } = statistics;
+  if (!statTotal) {
+    return (
+      <div>
+        <p>No Feedback Given</p>
+      </div>
+    );
+  }
   return (
     <div>
       <h2>Statistics</h2>
-      <p>Good: {statGood}</p>
-      <p>Neutral: {statNeutral}</p>
-      <p>Bad: {statBad}</p>
-
-      <p>
-        <b>Total Reviews: </b>
-        {statTotal}
-      </p>
-      <p>
-        <b>Current Average: </b>
-        {statAverage.toFixed(2)}
-      </p>
-      <p>
-        <b>Current Positive: </b>
-        {getPositive().toFixed(2)}%
-      </p>
+      <StatisticsLine text="Good Review Count" value={statGood} />
+      <StatisticsLine text="Neutral Review Count" value={statNeutral} />
+      <StatisticsLine text="Bad Review Count" value={statBad} />
+      <StatisticsLine text="Total Reviews" value={statTotal} />
+      <StatisticsLine text="Current Average" value={statAverage.toFixed(2)} />
+      <StatisticsLine
+        text="Current Positive"
+        value={getPositive().toFixed(2) + "%"}
+      />
     </div>
   );
 };

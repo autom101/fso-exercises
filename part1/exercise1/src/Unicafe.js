@@ -11,9 +11,12 @@ const Button = ({ text, handleClick }) => {
 const StatisticsLine = ({ text, value }) => {
   return (
     <>
-      <p>
-        <b>{text}</b>: {value}
-      </p>
+      <tr>
+        <td>
+          <b>{text}</b>
+        </td>
+        <td>{value}</td>
+      </tr>
     </>
   );
 };
@@ -37,15 +40,22 @@ const Statistics = ({ statistics }) => {
   return (
     <div>
       <h2>Statistics</h2>
-      <StatisticsLine text="Good Review Count" value={statGood} />
-      <StatisticsLine text="Neutral Review Count" value={statNeutral} />
-      <StatisticsLine text="Bad Review Count" value={statBad} />
-      <StatisticsLine text="Total Reviews" value={statTotal} />
-      <StatisticsLine text="Current Average" value={statAverage.toFixed(2)} />
-      <StatisticsLine
-        text="Current Positive"
-        value={getPositive().toFixed(2) + "%"}
-      />
+      <table>
+        <tbody>
+          <StatisticsLine text="Good Review Count" value={statGood} />
+          <StatisticsLine text="Neutral Review Count" value={statNeutral} />
+          <StatisticsLine text="Bad Review Count" value={statBad} />
+          <StatisticsLine text="Total Reviews" value={statTotal} />
+          <StatisticsLine
+            text="Current Average"
+            value={statAverage.toFixed(2)}
+          />
+          <StatisticsLine
+            text="Current Positive"
+            value={getPositive().toFixed(2) + "%"}
+          />
+        </tbody>
+      </table>
     </div>
   );
 };

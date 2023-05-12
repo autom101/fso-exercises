@@ -23,8 +23,12 @@ const Anecdotes = () => {
   const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState(Array(8).fill(0));
 
+  const highestVoteIndex = points.indexOf(Math.max(...points));
+  console.log("Highest votes: ", highestVoteIndex);
+
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       <p>{anecdotes[selected]}</p>
       <p>Has: {points[selected]} votes</p>
       <div>
@@ -44,6 +48,9 @@ const Anecdotes = () => {
           }}
         />
       </div>
+      <h2>Anecdote with most votes</h2>
+      <p>{anecdotes[highestVoteIndex]}</p>
+      <p>Has: {points[highestVoteIndex]} votes</p>
     </div>
   );
 };

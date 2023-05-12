@@ -8,6 +8,38 @@ const Button = ({ text, handleClick }) => {
   );
 };
 
+const Statistics = ({ statistics }) => {
+  const {
+    statGood,
+    statNeutral,
+    statBad,
+    statAverage,
+    statTotal,
+    getPositive,
+  } = statistics;
+  return (
+    <div>
+      <h2>Statistics</h2>
+      <p>Good: {statGood}</p>
+      <p>Neutral: {statNeutral}</p>
+      <p>Bad: {statBad}</p>
+
+      <p>
+        <b>Total Reviews: </b>
+        {statTotal}
+      </p>
+      <p>
+        <b>Current Average: </b>
+        {statAverage.toFixed(2)}
+      </p>
+      <p>
+        <b>Current Positive: </b>
+        {getPositive().toFixed(2)}%
+      </p>
+    </div>
+  );
+};
+
 const Unicafe = () => {
   const [goodFeedback, setGoodFeedback] = useState(0);
   const [neutralFeedback, setNeutralFeedback] = useState(0);
@@ -15,6 +47,18 @@ const Unicafe = () => {
   const [total, setTotal] = useState(0);
 
   const [average, setAverage] = useState(0);
+
+  const statisticsInfo = {
+    statGood: goodFeedback,
+    statNeutral: neutralFeedback,
+    statBad: badFeedback,
+    statTotal: total,
+    statAverage: average,
+    getPositive: () => {
+      const positive = statisticsInfo.statGood / statisticsInfo.statTotal || 0;
+      return positive * 100;
+    },
+  };
 
   const buttonInfo = {
     goodButton: {
@@ -70,23 +114,7 @@ const Unicafe = () => {
         text={buttonInfo.badButton.text}
         handleClick={buttonInfo.badButton.handleClick}
       />
-      <h2>Statistics</h2>
-      <p>Good: {goodFeedback}</p>
-      <p>Neutral: {neutralFeedback}</p>
-      <p>Bad: {badFeedback}</p>
-
-      <p>
-        <b>Total Reviews: </b>
-        {total}
-      </p>
-      <p>
-        <b>Current Average: </b>
-        {average.toFixed(2)}
-      </p>
-      <p>
-        <b>Current Positive: </b>
-        {(goodFeedback / total).toFixed(4) * 100}%
-      </p>
+      <Statistics statistics={statisticsInfo} />
     </div>
   );
 };

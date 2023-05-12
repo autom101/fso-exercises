@@ -14,5 +14,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 ReactDOM.createRoot(document.getElementById("root")).render(<Unicafe />);
 */
 
-// Exercises 1.12-1.1
+// Exercises 1.12-1.14
 ReactDOM.createRoot(document.getElementById("root")).render(<Anecdotes />);

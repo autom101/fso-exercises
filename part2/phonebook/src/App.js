@@ -1,4 +1,5 @@
-import axios from "axios";
+import personsService from "./services/persons.js";
+
 import { useState, useEffect } from "react";
 import Filter from "./components/Filter.js";
 import Person from "./components/Person.js";
@@ -12,36 +13,60 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
 
+  const clearFields = () => {
+    setNewName("");
+    setNewNumber("");
+    setFilter("");
+  };
+
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => {
-        setPersons(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    personsService.getData().then((response) => {
+      setPersons(response);
+      clearFields();
+    });
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let isInsidePersons = false;
     for (const obj of persons) {
       if (obj.name === newName) {
-        alert(`${newName} is already in the phone book!`);
-        return;
+        const objToChange = { ...obj };
+        isInsidePersons = true;
+
+        if (
+          window.confirm(
+            `${newName} is already in the phone book. Do you want to replace the old number with a new one?`
+          )
+        ) {
+          objToChange.number = newNumber;
+          const objToChangeID = objToChange.id;
+
+          personsService
+            .replaceData(objToChange, objToChangeID)
+            .then((response) => {
+              const newPersons = persons.map((person) => {
+                return person.id !== objToChange.id ? person : response;
+              });
+              setPersons(newPersons);
+              clearFields();
+            });
+        }
       }
     }
 
-    const newPerson = {
-      name: newName,
-      number: newNumber,
-      id: persons.length + 1,
-    };
-    const personsCopy = [...persons, newPerson];
-    setPersons(personsCopy);
-    setNewName("");
-    setNewNumber("");
-    setFilter("");
+    if (!isInsidePersons) {
+      const newPersonObject = {
+        name: newName,
+        number: newNumber,
+        id: persons.length + 1,
+      };
+
+      personsService.postData(newPersonObject).then((returnedPerson) => {
+        setPersons([...persons, returnedPerson]);
+      });
+    }
+    clearFields();
   };
 
   const updateName = (e) => {
@@ -54,6 +79,21 @@ const App = () => {
 
   const updateFilter = (e) => {
     setFilter(e.target.value);
+  };
+
+  const deletePerson = (name, id) => {
+    if (window.confirm(`Are you sure you want to delete ${name}?`)) {
+      const personToDelete = persons.find((person) => person.id === id);
+      const deletedPersonIndex = persons.findIndex(
+        (person) => person === personToDelete
+      );
+      personsService.deleteData(personToDelete, id).then((response) => {
+        const copyPersons = [...persons];
+        copyPersons.splice(deletedPersonIndex, 1);
+        setPersons(copyPersons);
+        clearFields();
+      });
+    }
   };
 
   const filteredPersons = persons.filter((person) => {
@@ -75,7 +115,13 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {filteredPersons.map((person) => {
-          return <Person key={person.name} person={person} />;
+          return (
+            <Person
+              key={person.id}
+              person={person}
+              deletePerson={deletePerson}
+            />
+          );
         })}
       </ul>
     </div>

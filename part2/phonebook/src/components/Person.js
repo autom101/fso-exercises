@@ -1,6 +1,6 @@
 const Person = ({ person, deletePerson }) => {
   return (
-    <>
+    <div className="list-item">
       <li>
         {person.name} {person.number}
       </li>
@@ -11,7 +11,7 @@ const Person = ({ person, deletePerson }) => {
       >
         Delete
       </button>
-    </>
+    </div>
   );
 };
 

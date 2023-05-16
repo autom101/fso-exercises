@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter.js";
 import Person from "./components/Person.js";
 import PersonForm from "./components/PersonForm.js";
+import Notification from "./components/Notification.js";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -12,11 +13,28 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [notiMessage, setNotiMessage] = useState("");
+  const [errorClass, setErrorClass] = useState("");
 
   const clearFields = () => {
     setNewName("");
     setNewNumber("");
     setFilter("");
+  };
+
+  const showNotification = (message, isError) => {
+    if (isError) {
+      setErrorClass("error");
+      setNotiMessage(message + "!");
+      setTimeout(() => {
+        setNotiMessage(null);
+      }, 3000);
+    } else {
+      setNotiMessage(message + "!");
+      setTimeout(() => {
+        setNotiMessage(null);
+      }, 3000);
+    }
   };
 
   useEffect(() => {
@@ -49,7 +67,20 @@ const App = () => {
                 return person.id !== objToChange.id ? person : response;
               });
               setPersons(newPersons);
+              showNotification(
+                `Successfully changed the number of ${response.name}`
+              );
               clearFields();
+            })
+            .catch((error) => {
+              showNotification(
+                `${objToChange.name} has already been removed from the server`,
+                true
+              );
+              console.log(
+                `Error changing phone number for ${objToChange.name}:`,
+                error
+              );
             });
         }
       }
@@ -62,9 +93,17 @@ const App = () => {
         id: persons.length + 1,
       };
 
-      personsService.postData(newPersonObject).then((returnedPerson) => {
-        setPersons([...persons, returnedPerson]);
-      });
+      personsService
+        .postData(newPersonObject)
+        .then((returnedPerson) => {
+          setPersons([...persons, returnedPerson]);
+          showNotification(
+            `Successfully added ${returnedPerson.name} to phonebook`
+          );
+        })
+        .catch((error) => {
+          console.log(`Error adding ${newName} to phonebook:`, error);
+        });
     }
     clearFields();
   };
@@ -87,12 +126,18 @@ const App = () => {
       const deletedPersonIndex = persons.findIndex(
         (person) => person === personToDelete
       );
-      personsService.deleteData(personToDelete, id).then((response) => {
-        const copyPersons = [...persons];
-        copyPersons.splice(deletedPersonIndex, 1);
-        setPersons(copyPersons);
-        clearFields();
-      });
+      personsService
+        .deleteData(personToDelete, id)
+        .then((response) => {
+          const copyPersons = [...persons];
+          copyPersons.splice(deletedPersonIndex, 1);
+          setPersons(copyPersons);
+          showNotification(`Successfully deleted ${name} from phonebook`);
+          clearFields();
+        })
+        .catch((error) => {
+          console.log(`Error deleting ${name} from phone book:`, error);
+        });
     }
   };
 
@@ -102,7 +147,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={notiMessage} errorClass={errorClass} />
       <Filter filter={filter} updateFilter={updateFilter} />
       <h2>Add new entry</h2>
       <PersonForm

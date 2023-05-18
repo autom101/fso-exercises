@@ -1,7 +1,19 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 
+morgan.token("post-info", (request, response) => {
+  if (request.method === "POST") {
+    return JSON.stringify(request.body);
+  } else {
+    return "";
+  }
+});
+const logger = morgan(
+  ":method :url :status :res[content-length] - :response-time ms :post-info"
+);
 app.use(express.json());
+app.use(logger);
 
 let persons = [
   {
@@ -85,5 +97,5 @@ app.post("/api/persons", (request, response) => {
 const PORT = 3002;
 
 app.listen(PORT, () => {
-  console.log("hi\n\n\n");
+  console.log(`Server running on port ${PORT}\n`);
 });

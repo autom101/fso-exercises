@@ -1,0 +1,24 @@
+###3.1
+GET http://localhost:3002/api/persons
+###3.2
+GET http://localhost:3002/api/info
+###3.3
+GET http://localhost:3002/api/persons/4
+###3.4
+DELETE http://localhost:3002/api/persons/4
+###3.5
+POST http://localhost:3002/api/persons
+Content-Type: application/json
+
+{
+    "name": "Mrary Poppendieck",
+    "number": "2"
+}
+###3.6
+POST http://localhost:3002/api/persons
+Content-Type: application/json
+
+{
+    "name": "Mrary Poppendieck",
+    "number": "2"
+}

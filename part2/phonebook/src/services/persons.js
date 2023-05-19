@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = `http://localhost:3001/persons`;
+const url = `https://phonebook-ga8t.onrender.com/api/persons`;
 
 const getData = () => {
   const get = axios.get(url);

@@ -1,0 +1,2 @@
+*{box-sizing:border-box}.notification{background-color:#fef9c3;color:#22c55e;font-size:32px;font-style:italic;font-weight:1000;height:2rem;line-height:2rem;margin:0 auto;width:-webkit-max-content;width:max-content}.error{background-color:#ef4444;color:#fef9c3}ul{flex-direction:column;list-style-type:none;margin:0;padding:0}.list-item,ul{display:flex;gap:1rem}.list-item{width:300px}.list-item button{margin-left:auto}button:hover{background-color:#000;color:#fff;cursor:pointer}
+/*# sourceMappingURL=main.44674f2c.css.map*/

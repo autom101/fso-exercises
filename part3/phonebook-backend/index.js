@@ -32,7 +32,6 @@ app.get(`/api/persons`, (request, response) => {
 app.get("/api/info", (request, response) => {
   Note.find({}).then((persons) => {
     const date = new Date();
-    response.json(persons);
     const numOfPeopleInfo = `<p>The phonebook has information for ${persons.length} people</p><p>${date}</p>`;
     response.send(numOfPeopleInfo);
   });

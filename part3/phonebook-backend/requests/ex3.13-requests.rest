@@ -1,1 +1,4 @@
-GET https://phonebook-ga8t.onrender.com/api/persons;
+### Get all persons:
+GET https://phonebook-ga8t.onrender.com/api/persons
+### Get information:
+GET https://phonebook-ga8t.onrender.com/api/info

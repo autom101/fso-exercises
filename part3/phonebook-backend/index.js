@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
-const Note = require("./models/note.js");
+const Person = require("./models/person.js");
 
 const app = express();
 
@@ -24,13 +24,13 @@ app.use(cors());
 app.use(express.static("../build"));
 
 app.get(`/api/persons`, (request, response) => {
-  Note.find({}).then((persons) => {
+  Person.find({}).then((persons) => {
     response.json(persons);
   });
 });
 
 app.get("/api/info", (request, response) => {
-  Note.find({}).then((persons) => {
+  Person.find({}).then((persons) => {
     const date = new Date();
     const numOfPeopleInfo = `<p>The phonebook has information for ${persons.length} people</p><p>${date}</p>`;
     response.send(numOfPeopleInfo);
@@ -39,7 +39,7 @@ app.get("/api/info", (request, response) => {
 
 app.get(`/api/persons/:id`, (request, response) => {
   const id = request.params.id;
-  Note.findbyId({ id }).then((person) => {
+  Person.findbyId({ id }).then((person) => {
     response.json(person);
   });
 });

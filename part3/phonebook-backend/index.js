@@ -54,28 +54,28 @@ app.delete("/api/persons/:id", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
   const newId = Math.ceil(Math.random() * 2000000000000000);
-  const newPerson = request.body;
-  const uniqueName = !persons.find((person) => {
-    return person.name === newPerson.name;
+  const receivedInfo = request.body;
+
+  if (!receivedInfo.name || !receivedInfo.number) {
+    response
+      .status(400)
+      .json("Missing name or number. Please input a name and a number!");
+  }
+
+  const person = new Person({
+    id: newId,
+    name: receivedInfo.name,
+    number: receivedInfo.number,
   });
 
-  const errorMessage = { error: "" };
-
-  if (!newPerson.name || !newPerson.number) {
-    errorMessage.error = "Name and number fields cannot be empty";
-  }
-
-  if (!uniqueName) {
-    errorMessage.error = "Name must be unique";
-  }
-
-  if (!errorMessage.error) {
-    newPerson.id = newId;
-    persons = [...persons, newPerson];
-    response.json(newPerson);
-  } else {
-    response.status(400).json(errorMessage);
-  }
+  person
+    .save()
+    .then((returnedObj) => {
+      response.json(returnedObj);
+    })
+    .catch((error) => {
+      response.status(400).json("Error: ", error);
+    });
 });
 
 const PORT = process.env.PORT || 3001;

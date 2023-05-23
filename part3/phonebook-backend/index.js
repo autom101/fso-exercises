@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(cors());
 app.use(logger);
 
-app.get(`/api/persons`, (request, response, next) => {
+app.get("/api/persons", (request, response, next) => {
   Person.find({})
     .then((persons) => {
       response.json(persons);
@@ -45,7 +45,7 @@ app.get("/api/info", (request, response, next) => {
     });
 });
 
-app.get(`/api/persons/:id`, (request, response, next) => {
+app.get("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
   Person.findbyId({ id })
     .then((person) => {
@@ -76,7 +76,11 @@ app.put("/api/persons/:id", (request, response, next) => {
     number: receivedObj.number,
   };
 
-  Person.findByIdAndUpdate(id, person, { new: true })
+  Person.findByIdAndUpdate(id, person, {
+    new: true,
+    runValidators: true,
+    query: "context",
+  })
     .then((result) => {
       response.json(result);
     })
@@ -107,7 +111,7 @@ app.post("/api/persons", (request, response, next) => {
       response.json(returnedObj);
     })
     .catch((error) => {
-      console.log("Error while posting: ", error);
+      console.log("Error while posting: ", error.message);
     });
 });
 
@@ -118,9 +122,11 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint);
 
 const errorHandler = (error, request, response, next) => {
-  console.log("Error : ", error);
-  if (error === "CastError") {
+  console.log("Error : ", error.message);
+  if (error.name === "CastError") {
     response.status(400).send({ error: "Malformatted Id" });
+  } else if ((error.name === "ValidationError")) {
+    response.status(400).send({ error: error.message });
   }
   next(error);
 };

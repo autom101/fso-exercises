@@ -129,7 +129,7 @@ const errorHandler = (error, request, response, next) => {
   }
 
   if (error.name === "ValidationError") {
-    const errorMessage = error.message;
+    const errorMessage = error.response.data.error;
     response.status(400).json({ error: errorMessage });
   }
 

@@ -79,7 +79,7 @@ app.put("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndUpdate(id, person, {
     new: true,
     runValidators: true,
-    query: "context",
+    context: "query",
   })
     .then((result) => {
       response.json(result);

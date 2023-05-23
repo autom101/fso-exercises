@@ -111,7 +111,7 @@ app.post("/api/persons", (request, response, next) => {
       response.json(returnedObj);
     })
     .catch((error) => {
-      console.log("Error while posting: ", error.message);
+      console.log(error.response.data.error);
       next(error);
     });
 });
@@ -123,13 +123,13 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint);
 
 const errorHandler = (error, request, response, next) => {
-  console.log("Error : ", error.message);
+  const errorMessage = error.message;
+  console.log("Error : ", errorMessage);
   if (error.name === "CastError") {
     response.status(400).send({ error: "Malformatted Id" });
   }
 
   if (error.name === "ValidationError") {
-    const errorMessage = error.response.data.error;
     response.status(400).json({ error: errorMessage });
   }
 

@@ -112,6 +112,7 @@ app.post("/api/persons", (request, response, next) => {
     })
     .catch((error) => {
       console.log("Error while posting: ", error.message);
+      next(error);
     });
 });
 
@@ -125,7 +126,7 @@ const errorHandler = (error, request, response, next) => {
   console.log("Error : ", error.message);
   if (error.name === "CastError") {
     response.status(400).send({ error: "Malformatted Id" });
-  } else if ((error.name === "ValidationError")) {
+  } else if (error.name === "ValidationError") {
     response.status(400).send({ error: error.message });
   }
   next(error);

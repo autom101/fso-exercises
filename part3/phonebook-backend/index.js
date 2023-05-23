@@ -71,17 +71,16 @@ app.put("/api/persons/:id", (request, response, next) => {
   const receivedObj = request.body;
   const id = request.params.id;
 
-  const person = new Person({
+  const person = {
     name: receivedObj.name,
     number: receivedObj.number,
-  });
+  };
 
-  Person.findByIdAndUpdate(id, person)
+  Person.findByIdAndUpdate(id, person, { new: true })
     .then((result) => {
       response.json(result);
     })
     .catch((error) => {
-      console.log("Error updating info: ", error);
       next(error);
     });
 });
@@ -119,6 +118,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint);
 
 const errorHandler = (error, request, response, next) => {
+  console.log("Error : ", error);
   if (error === "CastError") {
     response.status(400).send({ error: "Malformatted Id" });
   }

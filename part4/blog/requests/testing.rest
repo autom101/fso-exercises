@@ -1,0 +1,2 @@
+###Test for getting blog
+GET https://p4-blogs.onrender.com/api/blogs

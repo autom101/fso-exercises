@@ -1,2 +1,12 @@
 ###Test for getting blog
 GET https://p4-blogs.onrender.com/api/blogs
+###Post test:
+POST https://p4-blogs.onrender.com/api/blogs
+content-type: application/json
+
+{
+  "title": "Testing title 8:47",
+  "author": "Testing",
+  "url": "Test",
+  "likes": 2,
+}

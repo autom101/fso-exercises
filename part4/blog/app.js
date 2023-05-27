@@ -13,7 +13,7 @@ const app = express();
 
 // Connect to mongoose
 mongoose.set("strictQuery", false);
-logger.info(`Connecting to ${config.MONGODB_URI}`);
+logger.informationLog(`Connecting to ${config.MONGODB_URI}`);
 mongoose.connect(config.MONGODB_URI);
 
 // Basic middleware

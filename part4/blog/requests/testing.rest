@@ -2,11 +2,11 @@
 GET https://p4-blogs.onrender.com/api/blogs
 ###Post test:
 POST https://p4-blogs.onrender.com/api/blogs
-content-type: application/json
+Content-type: application/json
 
 {
-  "title": "Testing title 8:47",
+  "title": "Testing title 8:53",
   "author": "Testing",
   "url": "Test",
-  "likes": 2,
+  "likes": 2
 }

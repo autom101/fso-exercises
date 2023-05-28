@@ -53,4 +53,34 @@ const mostBlogs = (givenBlogs) => {
   return authorToReturn;
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostLikes = (givenBlogs) => {
+  let authors = {};
+  let mostLikes = givenBlogs[0].likes;
+  let authorWithMostLikes = givenBlogs[0];
+
+  for (let blog of givenBlogs) {
+    const author = blog.author;
+    // If author is already encountered, add to their count. Otherwise add them to authors object
+    if (authors.hasOwnProperty(author)) {
+      authors[author].likes += blog.likes;
+    } else {
+      authors[author] = blog;
+      authors[author].likes = blog.likes;
+    }
+
+    const authorLikeCount = authors[author].likes;
+    if (authorLikeCount > mostLikes) {
+      authorWithMostLikes = blog;
+      mostLikes = authorLikeCount;
+    }
+  }
+
+  const authorToReturn = {
+    author: authorWithMostLikes.author,
+    likes: mostLikes,
+  };
+
+  return authorToReturn;
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };

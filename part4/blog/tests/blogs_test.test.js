@@ -17,7 +17,7 @@ beforeEach(async () => {
   await Promise.all(blogPromiseArray);
 }, 20000);
 
-test("notes are returned as json", async () => {
+test("blogs are returned as json", async () => {
   await api
     .get("/api/blogs")
     .expect(200)
@@ -29,6 +29,12 @@ test("/api/blogs returns correct amount of blogs", async () => {
 
   expect(response.body).toHaveLength(helper.initialBlogs.length);
 }, 100000);
+
+test("returned blogs have an id attribute", async () => {
+  const response = await api.get("/api/blogs");
+
+  expect(response.body[0].id).toBeDefined();
+});
 
 afterAll(async () => {
   await mongoose.connection.close();

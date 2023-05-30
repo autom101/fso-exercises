@@ -56,6 +56,25 @@ test("making an HTTP POST request creates a new blog", async () => {
   expect(response.body.map((obj) => obj.author)).toContain(validBlog.author);
 });
 
+test("likes value defaults to 0 when missing from a request", async () => {
+  const blogMissingLikes = {
+    title: "Valid Blog",
+    author: "Who dis",
+    url: "https://asdf.com/",
+  };
+
+  await api
+    .post("/api/blogs")
+    .send(blogMissingLikes)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const response = await api.get("/api/blogs");
+  expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
+
+  expect(response.body[helper.initialBlogs.length].likes).toEqual(0);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });

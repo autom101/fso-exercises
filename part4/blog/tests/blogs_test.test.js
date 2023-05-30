@@ -75,7 +75,23 @@ test("likes value defaults to 0 when missing from a request", async () => {
   expect(response.body[helper.initialBlogs.length].likes).toEqual(0);
 });
 
-test("a post request missing title or url returns status 400, and is not added to database", async () => {
+test("a post request missing title or url returns status 400", async () => {
+  const blogMissingTitle = {
+    author: "Who dis",
+    url: "Missing title",
+  };
+
+  await api.post("/api/blogs").send(blogMissingTitle).expect(400);
+
+  const blogMissingUrl = {
+    title: "Missing url",
+    author: "Who dis",
+  };
+
+  await api.post("/api/blogs").send(blogMissingUrl).expect(400);
+});
+
+test("a POST request missing title/url is not added to database", async () => {
   const blogMissingTitle = {
     author: "Who dis",
     url: "Missing title",

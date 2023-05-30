@@ -110,6 +110,17 @@ test("a POST request missing title/url is not added to database", async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length);
 });
 
+test("deletion of a blog with correct id provided returns status 204", async () => {
+  const noteToDeleteId = helper.initialBlogs[0]._id;
+  await api.delete(`/api/blogs/${noteToDeleteId}`).expect(204);
+
+  const response = await api.get("/api/blogs");
+
+  expect(response.body).toHaveLength(helper.initialBlogs.length - 1);
+
+  expect(response.body.map((blog) => blog.id)).not.toContain(noteToDeleteId);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });

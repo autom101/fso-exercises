@@ -38,19 +38,19 @@ test("returned blogs have an id attribute", async () => {
 
 test("making an HTTP POST request creates a new blog", async () => {
   const validBlog = {
-    _id: "5a422a85asdknc7336234d17f7",
     title: "Valid Blog",
     author: "Who dis",
     url: "https://asdf.com/",
     likes: 7,
-    __v: 0,
   };
 
-  await api.post("/api/blogs").send(validBlog);
-  // .expect(201)
-  // .expect("Content-Type", /application\/json/);
+  await api
+    .post("/api/blogs")
+    .send(validBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
 
-  const response = await Blog.find({});
+  const response = await api.get("/api/blogs");
   expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
 
   expect(response.body.map((obj) => obj.author)).toContain(validBlog.author);

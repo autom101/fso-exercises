@@ -13,6 +13,8 @@ blogRouter.get("/", (request, response, next) => {
 
 blogRouter.post("/", async (request, response, next) => {
   const blog = new Blog(request.body);
+  console.log("Blog: ", blog);
+
   try {
     const returnedObj = await blog.save();
     response.status(201).json(returnedObj);

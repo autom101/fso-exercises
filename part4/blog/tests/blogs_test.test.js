@@ -15,7 +15,7 @@ beforeEach(async () => {
     .map((blog) => blog.save());
 
   await Promise.all(blogPromiseArray);
-}, 20000);
+});
 
 test("blogs are returned as json", async () => {
   await api
@@ -121,7 +121,7 @@ test("deletion of a blog with correct id provided returns status 204", async () 
   expect(response.body.map((blog) => blog.id)).not.toContain(noteToDeleteId);
 });
 
-test.only("modifying a blog's likes is successful", async () => {
+test("modifying a blog's likes is successful", async () => {
   let initialNoteLikes = helper.initialBlogs[0].likes; // Use let for mutable variable
   const noteId = helper.initialBlogs[0]._id;
   helper.initialBlogs[0].likes++;

@@ -38,33 +38,15 @@ blogRouter.delete("/:id", async (request, response, next) => {
   }
 });
 
-/* app.put("/api/notes/:id", (request, response, next) => {
-  const body = request.body;
-
-  const note = {
-    content: body.content,
-    important: body.important,
-  };
-
-  Note.findByIdAndUpdate(request.params.id, note, { new: true })
-    .then((updatedNote) => {
-      response.json(updatedNote);
-    })
-    .catch((error) => next(error));
-}); */
-
 blogRouter.put("/:id", async (request, response, next) => {
-  console.log("Id received: ", response.params.id);
-  console.log("Response body: ", response.body);
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(
-      response.params.id,
-      response.body,
+      request.params.id,
+      request.body,
       {
         new: true,
       }
     );
-    console.log("Updated blog became this: ", updatedBlog);
     response.json(updatedBlog).end();
   } catch (error) {
     next(error);

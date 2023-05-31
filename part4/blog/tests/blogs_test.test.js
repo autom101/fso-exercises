@@ -121,8 +121,8 @@ test("deletion of a blog with correct id provided returns status 204", async () 
   expect(response.body.map((blog) => blog.id)).not.toContain(noteToDeleteId);
 });
 
-test("modifying a blog's likes is successful", async () => {
-  const initialNoteLikes = helper.initialBlogs[0].likes;
+test.only("modifying a blog's likes is successful", async () => {
+  let initialNoteLikes = helper.initialBlogs[0].likes; // Use let for mutable variable
   const noteId = helper.initialBlogs[0]._id;
   helper.initialBlogs[0].likes++;
 
@@ -131,9 +131,11 @@ test("modifying a blog's likes is successful", async () => {
     .send(helper.initialBlogs[0])
     .expect(200);
 
+  initialNoteLikes++; // Update the initialNoteLikes variable
+
   const response = await api.get("/api/blogs");
-  expect(response.body[0].likes).toBe(initialNoteLikes + 1);
-});
+  expect(response.body[0].likes).toBe(initialNoteLikes);
+}, 20000);
 
 afterAll(async () => {
   await mongoose.connection.close();

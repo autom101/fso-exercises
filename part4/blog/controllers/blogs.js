@@ -33,8 +33,25 @@ blogRouter.delete("/:id", async (request, response, next) => {
   try {
     await Blog.findByIdAndRemove(request.params.id);
     response.status(204).end();
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    next(error);
+  }
+});
+
+blogRouter.put(":/id", async (request, response, next) => {
+  console.log("Came in here like this: ", request.body);
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      request.params.id,
+      response.body,
+      {
+        new: true,
+      }
+    );
+    console.log("And became this: ", updatedBlog);
+    response.json(updatedBlog);
+  } catch (error) {
+    next(error);
   }
 });
 

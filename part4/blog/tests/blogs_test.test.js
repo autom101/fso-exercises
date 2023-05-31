@@ -121,6 +121,20 @@ test("deletion of a blog with correct id provided returns status 204", async () 
   expect(response.body.map((blog) => blog.id)).not.toContain(noteToDeleteId);
 });
 
+test("modifying a blog's likes is successful", async () => {
+  const initialNoteLikes = helper.initialBlogs[0].likes;
+  const noteId = helper.initialBlogs[0]._id;
+  helper.initialBlogs[0].likes++;
+
+  await api
+    .put(`/api/blogs/${noteId}`)
+    .send(helper.initialBlogs[0])
+    .expect(200);
+
+  const response = await api.get("/api/blogs");
+  expect(response.body[0].likes).toBe(initialNoteLikes + 1);
+});
+
 afterAll(async () => {
   await mongoose.connection.close();
 });

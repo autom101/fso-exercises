@@ -1,1 +1,2 @@
 ###Get all users:
+GET https://p4-blogs.onrender.com/api/users

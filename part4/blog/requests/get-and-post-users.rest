@@ -5,7 +5,7 @@ POST https://p4-blogs.onrender.com/api/users
 Content-Type: application/json
 
 {
-  "username": "test",
+  "username": "32test",
   "name": "Bob",
   "password": "password"
 }

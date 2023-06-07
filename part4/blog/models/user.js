@@ -31,4 +31,4 @@ userSchema.set("toJSON", {
 
 const User = mongoose.model("User", userSchema);
 
-module.experts = User;
+module.exports = User;

@@ -1,10 +1,9 @@
-const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
 const userSchema = mongoose.Schema({
   username: {
-    Type: String,
+    type: String,
     required: true,
     unique: true,
   },
@@ -12,7 +11,7 @@ const userSchema = mongoose.Schema({
   passwordHash: String,
   blogs: [
     {
-      Type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Blog",
     },
   ],

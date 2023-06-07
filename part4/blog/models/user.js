@@ -29,6 +29,6 @@ userSchema.set("toJSON", {
   },
 });
 
-const User = mongoose.model(userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.experts = User;

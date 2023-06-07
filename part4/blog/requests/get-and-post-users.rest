@@ -1,2 +1,11 @@
 ###Get all users:
 GET https://p4-blogs.onrender.com/api/users
+###POST
+POST https://p4-blogs.onrender.com/api/users
+Content-Type: application/json
+
+{
+  "username": "test",
+  "name": "Bob",
+  "password": "password"
+}

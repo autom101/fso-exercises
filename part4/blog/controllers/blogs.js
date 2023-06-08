@@ -1,6 +1,7 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 blogRouter.get("/", async (request, response, next) => {
   try {
@@ -11,37 +12,50 @@ blogRouter.get("/", async (request, response, next) => {
   }
 });
 
-blogRouter.post("/", async (request, response, next) => {
-  const information = request.body;
+const getToken = (request) => {
+  const authorization = request.get("authorization");
+  const authenticationScheme = "Bearer ";
+  if (authorization && authorization.startsWith(authenticationScheme)) {
+    return authorization.replace(authenticationScheme, "");
+  }
+  return null;
+};
 
-  if (!information.title || !information.url) {
-    response.status(400).end();
-  } else {
-    if (!information.likes) {
+blogRouter.post("/", async (request, response, next) => {
+  try {
+    const information = request.body;
+
+    if (!information.title || !information.url) {
+      response.status(400).end();
+    } else if (!information.likes) {
       information.likes = 0;
     }
 
-    try {
-      const user = await User.findOne({});
+    const decodedToken = jwt.verify(getToken(request), process.env.SECRET);
 
-      const newBlog = {
-        title: information.title,
-        author: user.name,
-        url: information.url,
-        likes: information.likes,
-        user: user.id,
-      };
-
-      const blog = new Blog(newBlog);
-      const returnedObj = await blog.save();
-
-      user.blogs = [...user.blogs, returnedObj._id];
-      await user.save();
-
-      response.status(201).json(returnedObj);
-    } catch (error) {
-      next(error);
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: "invalid token" });
     }
+
+    const user = await User.findById(decodedToken.id);
+
+    const newBlog = {
+      title: information.title,
+      author: user.name,
+      url: information.url,
+      likes: information.likes,
+      user: user.id,
+    };
+
+    const blog = new Blog(newBlog);
+    const returnedObj = await blog.save();
+
+    user.blogs = [...user.blogs, returnedObj._id];
+    await user.save();
+
+    response.status(201).json(returnedObj);
+  } catch (error) {
+    next(error);
   }
 });
 

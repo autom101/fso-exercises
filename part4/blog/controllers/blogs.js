@@ -59,18 +59,17 @@ blogRouter.delete("/:id", async (request, response, next) => {
 
     const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
-    if (blog.user.toString() !== decodedToken.id) {
+    const blogUserId = blog.user.toString();
+    if (blogUserId !== decodedToken.id) {
       return response
         .status(401)
         .json({ error: "Incorrect username or password" });
     }
 
     const user = await User.findById(decodedToken.id);
-    const blogDeleted = await Blog.findByIdAndRemove(decodedToken.id);
+    await Blog.findByIdAndRemove(request.params.id);
 
-    user.blogs = user.blogs.filter(
-      (blog) => blog !== blogDeleted.user.toString()
-    );
+    user.blogs = user.blogs.filter((blog) => blog !== blogUserId);
     await user.save();
 
     response.status(204).end();

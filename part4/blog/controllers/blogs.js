@@ -52,7 +52,21 @@ blogRouter.post("/", async (request, response, next) => {
 
 blogRouter.delete("/:id", async (request, response, next) => {
   try {
-    await Blog.findByIdAndRemove(request.params.id);
+    const blog = Blog.findById(request.params.id);
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+
+    if (blog.user.toString() !== decodedToken.id) {
+      return response
+        .status(401)
+        .json({ error: "Incorrect username or password" });
+    }
+
+    const user = await User.findById(request.params.id);
+    const blogDeleted = await Blog.findByIdAndRemove(decodedToken.id);
+
+    user.blogs = user.blogs.filter((blog) => blog !== blogDeleted._id);
+    await user.save();
+
     response.status(204).end();
   } catch (error) {
     next(error);

@@ -11,7 +11,7 @@ loginRouter.post("/", async (request, response, next) => {
     const checkIfPasswordCorrect =
       user === null ? false : await bcrypt.compare(password, user.passwordHash);
 
-    if (!user && !checkIfPasswordCorrect) {
+    if (!(user && checkIfPasswordCorrect)) {
       return response.status(401).json({
         error: "Username and password does not match any existing user",
       });
@@ -22,7 +22,9 @@ loginRouter.post("/", async (request, response, next) => {
       id: user._id,
     };
 
-    const token = jwt.sign(userForToken, process.env.SECRET);
+    const token = jwt.sign(userForToken, process.env.SECRET, {
+      expiresIn: 3600,
+    });
 
     response
       .status(201)

@@ -65,7 +65,7 @@ blogRouter.delete("/:id", async (request, response, next) => {
         .json({ error: "Incorrect username or password" });
     }
 
-    const user = await User.findById(request.params.id);
+    const user = await User.findById(decodedToken.id);
     const blogDeleted = await Blog.findByIdAndRemove(decodedToken.id);
 
     user.blogs = user.blogs.filter((blog) => blog !== blogDeleted._id);

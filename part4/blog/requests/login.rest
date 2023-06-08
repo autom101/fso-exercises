@@ -10,18 +10,20 @@ Content-Type: application/json
 ###Use token to post a blog
 POST https://p4-blogs.onrender.com/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDgxZWQ1MjAzZDNmOTllOTUxZDg0ODIiLCJpYXQiOjE2ODYyNDE0ODYsImV4cCI6MTY4NjI0NTA4Nn0.33C1S_AhU3Y9v5Ssx74jA0qfhbLNkhAMC9pNy8W6DWQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDgyMGQ0MGUyNDU0MjRmMDU2MmVjMmQiLCJpYXQiOjE2ODYyNDQ3MjAsImV4cCI6MTY4NjI0ODMyMH0.uEztagIxNJwYBDgiOq5_aZueiw280XzJt14uH4k9Fw0
 
 {
   "title": "React patterns",
   "url": "https://reactpatterns.com/",
   "likes": 7
 }
+###Get blogs (to use to delete a blog below)
+GEt https://p4-blogs.onrender.com/api/blogs
 
 ###Delete a blog:
-DELETE https://p4-blogs.onrender.com/api/blogs/648200fe25da14fc57a1c573
+DELETE https://p4-blogs.onrender.com/api/blogs/64820d8ce245424f0562ec34
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDgxZWQ1MjAzZDNmOTllOTUxZDg0ODIiLCJpYXQiOjE2ODYyNDQzMzcsImV4cCI6MTY4NjI0NzkzN30.cXN2neUJyzI2DzZef4H3EjtLvdOAD-dYQ78Yfkhy8Pg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDgyMGQ0MGUyNDU0MjRmMDU2MmVjMmQiLCJpYXQiOjE2ODYyNDQ3MjAsImV4cCI6MTY4NjI0ODMyMH0.uEztagIxNJwYBDgiOq5_aZueiw280XzJt14uH4k9Fw0
 
 {
   "title": "React patterns",

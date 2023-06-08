@@ -53,6 +53,10 @@ blogRouter.post("/", async (request, response, next) => {
 blogRouter.delete("/:id", async (request, response, next) => {
   try {
     const blog = await Blog.findById(request.params.id);
+    if (!blog) {
+      return response.status(404).json({ error: "No such blog exists" });
+    }
+
     const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
     if (blog.user.toString() !== decodedToken.id) {

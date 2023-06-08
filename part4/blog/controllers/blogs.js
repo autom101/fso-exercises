@@ -22,13 +22,7 @@ blogRouter.post("/", async (request, response, next) => {
       information.likes = 0;
     }
 
-    const decodedToken = jwt.verify(request.token, process.env.SECRET);
-
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: "invalid token" });
-    }
-
-    const user = await User.findById(decodedToken.id);
+    const user = await request.user;
 
     const newBlog = {
       title: information.title,
@@ -57,16 +51,15 @@ blogRouter.delete("/:id", async (request, response, next) => {
       return response.status(404).json({ error: "No such blog exists" });
     }
 
-    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+    const user = await request.user;
 
     const blogUserId = blog.user.toString();
-    if (blogUserId !== decodedToken.id) {
+    if (blogUserId !== user.id) {
       return response
         .status(401)
         .json({ error: "Incorrect username or password" });
     }
 
-    const user = await User.findById(decodedToken.id);
     await Blog.findByIdAndRemove(request.params.id);
 
     user.blogs = user.blogs.filter((blog) => blog !== blogUserId);

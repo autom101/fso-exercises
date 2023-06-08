@@ -25,8 +25,8 @@ app.use(express.static("./build"));
 
 // Route handling and error handling middleware
 app.use(middleware.requestLogger);
-app.use(middleware.getToken);
-app.use("/api/blogs", blogRouter);
+app.use(middleware.tokenExtractor);
+app.use("/api/blogs", middleware.userExtractor, blogRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use(middleware.unknownEndpoint);

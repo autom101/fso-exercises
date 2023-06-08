@@ -1,5 +1,14 @@
 const logger = require("./logger");
 
+const getToken = (request, response, next) => {
+  const authorization = request.get("authorization");
+  const authenticationScheme = "Bearer ";
+  if (authorization && authorization.startsWith(authenticationScheme)) {
+    request.token = authorization.replace(authenticationScheme, "");
+  }
+  next();
+};
+
 const requestLogger = (request, response, next) => {
   logger.informationLog("-----Begin request log-----");
   logger.informationLog("Body: ", request.body);
@@ -25,4 +34,4 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-module.exports = { requestLogger, unknownEndpoint, errorHandler };
+module.exports = { requestLogger, getToken, unknownEndpoint, errorHandler };

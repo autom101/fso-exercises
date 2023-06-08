@@ -8,9 +8,9 @@ Content-Type: application/json
   "password": "P!assword"
 }
 ###Use token to post a blog
-POST https://p4-blogs.onrender.com/api/login
+POST https://p4-blogs.onrender.com/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDgxZWQ1MjAzZDNmOTllOTUxZDg0ODIiLCJpYXQiOjE2ODYyNDA1OTl9.0JomWfdiAdePhX44O-ZtP-pLi3Pmx-PhFJ_OlSwWjj8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDgxZWQ1MjAzZDNmOTllOTUxZDg0ODIiLCJpYXQiOjE2ODYyNDA4NzYsImV4cCI6MTY4NjI0NDQ3Nn0.lNY9yWVl89WNkv4r9NW7JNJxfe1SltFlOwF30uoFzZA
 
 {
   "title": "React patterns",

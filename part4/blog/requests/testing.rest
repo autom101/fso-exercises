@@ -1,16 +1,6 @@
 ###Test for getting blog
 GET https://p4-blogs.onrender.com/api/blogs
-###Post test:
-POST https://p4-blogs.onrender.com/api/blogs
-Content-type: application/json
-
-{
-  "title": "Testing title 8:53",
-  "author": "Testing",
-  "url": "Test",
-  "likes": 2
-}
-###
+###Post blog 1 test:
 POST https://p4-blogs.onrender.com/api/blogs
 Content-Type: application/json
 
@@ -19,11 +9,12 @@ Content-Type: application/json
   "url": "https://reactpatterns.com/",
   "likes": 7
 }
-###
+###Post blog 2 test:
 POST https://p4-blogs.onrender.com/api/blogs
 Content-Type: application/json
+
 {
   "title": "Go To Statement Considered Harmful",
   "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
   "likes": 5
-},
+}

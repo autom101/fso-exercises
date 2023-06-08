@@ -29,13 +29,13 @@ blogRouter.post("/", async (request, response, next) => {
         author: user.name,
         url: information.url,
         likes: information.likes,
-        user: user,
+        user: user.id,
       };
 
       const blog = new Blog(newBlog);
       const returnedObj = await blog.save();
 
-      user.blogs.push(returnedObj);
+      user.blogs = [...user.blogs, returnedObj._id];
       await user.save();
 
       response.status(201).json(returnedObj);

@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const supertest = require("supertest");
 const app = require("../app");
 
 const helper = require("./blog_helper");
-const Blog = require("../models/Blog");
+const Blog = require("../models/blog");
+const User = require("../models/user");
 
 const api = supertest(app);
 
@@ -15,9 +17,21 @@ beforeEach(async () => {
     .map((blog) => blog.save());
 
   await Promise.all(blogPromiseArray);
+
+  await User.deleteMany({});
+
+  const username = "testing 1111111";
+  const name = "testing Name";
+  const passwordHash = await bcrypt.hash("abcde", 10);
+  const newUser = new User({
+    username,
+    name,
+    passwordHash,
+  });
+  await newUser.save();
 });
 
-describe("Testing blog router", async () => {
+describe("Testing blog router", () => {
   test("blogs are returned as json", async () => {
     await api
       .get("/api/blogs")
@@ -40,13 +54,25 @@ describe("Testing blog router", async () => {
   test("making an HTTP POST request creates a new blog", async () => {
     const validBlog = {
       title: "Valid Blog",
-      author: "Who dis",
       url: "https://asdf.com/",
       likes: 7,
     };
 
+    const userLogin = await api
+      .post("/api/login")
+      .send({
+        username: "testing 1111111",
+        name: "testing Name",
+        password: "abcde",
+      })
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const token = "Bearer " + userLogin.body.token;
+
     await api
       .post("/api/blogs")
+      .set({ Authorization: token })
       .send(validBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -54,7 +80,7 @@ describe("Testing blog router", async () => {
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length + 1);
 
-    expect(response.body.map((obj) => obj.author)).toContain(validBlog.author);
+    expect(response.body.map((obj) => obj.author)).toContain("testing Name");
   });
 
   test("likes value defaults to 0 when missing from a request", async () => {
@@ -64,8 +90,21 @@ describe("Testing blog router", async () => {
       url: "https://asdf.com/",
     };
 
+    const userLogin = await api
+      .post("/api/login")
+      .send({
+        username: "testing 1111111",
+        name: "testing Name",
+        password: "abcde",
+      })
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const token = "Bearer " + userLogin.body.token;
+
     await api
       .post("/api/blogs")
+      .set({ Authorization: token })
       .send(blogMissingLikes)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -82,14 +121,22 @@ describe("Testing blog router", async () => {
       url: "Missing title",
     };
 
-    await api.post("/api/blogs").send(blogMissingTitle).expect(400);
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: " " })
+      .send(blogMissingTitle)
+      .expect(400);
 
     const blogMissingUrl = {
       title: "Missing url",
       author: "Who dis",
     };
 
-    await api.post("/api/blogs").send(blogMissingUrl).expect(400);
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: " " })
+      .send(blogMissingUrl)
+      .expect(400);
   });
 
   test("a POST request missing title/url is not added to database", async () => {
@@ -98,28 +145,63 @@ describe("Testing blog router", async () => {
       url: "Missing title",
     };
 
-    await api.post("/api/blogs").send(blogMissingTitle).expect(400);
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: " " })
+      .send(blogMissingTitle)
+      .expect(400);
 
     const blogMissingUrl = {
       title: "Missing url",
       author: "Who dis",
     };
 
-    await api.post("/api/blogs").send(blogMissingUrl).expect(400);
+    await api
+      .post("/api/blogs")
+      .set({ Authorization: " " })
+      .send(blogMissingUrl)
+      .expect(400);
 
     const response = await api.get("/api/blogs");
     expect(response.body).toHaveLength(helper.initialBlogs.length);
   });
 
   test("deletion of a blog with correct id provided returns status 204", async () => {
-    const noteToDeleteId = helper.initialBlogs[0]._id;
-    await api.delete(`/api/blogs/${noteToDeleteId}`).expect(204);
+    const userLogin = await api
+      .post("/api/login")
+      .send({
+        username: "testing 1111111",
+        name: "testing Name",
+        password: "abcde",
+      })
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    const token = "Bearer " + userLogin.body.token;
+
+    const validBlog = {
+      title: "Valid Blog",
+      url: "https://asdf.com/",
+      likes: 7,
+    };
+
+    const returnedBlog = await api
+      .post("/api/blogs")
+      .set({ Authorization: token })
+      .send(validBlog);
+
+    const blogToDelete = returnedBlog.body;
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ Authorization: token })
+      .expect(204);
 
     const response = await api.get("/api/blogs");
 
-    expect(response.body).toHaveLength(helper.initialBlogs.length - 1);
+    expect(response.body).toHaveLength(helper.initialBlogs.length);
 
-    expect(response.body.map((blog) => blog.id)).not.toContain(noteToDeleteId);
+    expect(response.body.map((blog) => blog.id)).not.toContain(blogToDelete.id);
   });
 
   test("modifying a blog's likes is successful", async () => {

@@ -10,3 +10,20 @@ Content-type: application/json
   "url": "Test",
   "likes": 2
 }
+###
+POST https://p4-blogs.onrender.com/api/blogs
+Content-Type: application/json
+
+{
+  "title": "React patterns",
+  "url": "https://reactpatterns.com/",
+  "likes": 7
+}
+###
+POST https://p4-blogs.onrender.com/api/blogs
+Content-Type: application/json
+{
+  "title": "Go To Statement Considered Harmful",
+  "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
+  "likes": 5
+},

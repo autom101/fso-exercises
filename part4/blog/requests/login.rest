@@ -21,12 +21,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imxhb
 //GET https://p4-blogs.onrender.com/api/blogs
 GET http://localhost:3003/api/blogs
 ###Use a token to modify a blog
-PUT http://localhost:3003/api/blogs/:
+PUT http://localhost:3003/api/blogs/64887f714afe242842607c2a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDg4N2Q5NDEwYmZhMWVmYWI1MjZjZmUiLCJpYXQiOjE2ODY2NjY2NTUsImV4cCI6MTY4NjY3MDI1NX0.LyT63czJDu7ydhgxclNGHTeFaatBBOZ35pBOOEChX4M
+
+{
+  "title": "React patterns",
+  "url": "https://reactpatterns.com/",
+  "likes": 700
+}
 
 
 ###Delete a blog:
 //DELETE https://p4-blogs.onrender.com/api/blogs/64887db6f8aae7f3f4f54d23
-DELETE http://localhost:3003/api/blogs/64887f284afe242842607c22
+DELETE http://localhost:3003/api/blogs/64887f714afe242842607c2a
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDg4N2Q5NDEwYmZhMWVmYWI1MjZjZmUiLCJpYXQiOjE2ODY2NjY2NTUsImV4cCI6MTY4NjY3MDI1NX0.LyT63czJDu7ydhgxclNGHTeFaatBBOZ35pBOOEChX4M
 

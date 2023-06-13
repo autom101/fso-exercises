@@ -81,10 +81,22 @@ blogRouter.delete("/:id", async (request, response, next) => {
 
 blogRouter.put("/:id", async (request, response, next) => {
   try {
-    const previousBlog = await Blog.findById(request.params.id);
-    const user = previousBlog.user;
+    const blog = await Blog.findById(request.params.id);
+    if (!blog) {
+      return response.status(404).json({ error: "No such blog exists" });
+    }
+    console.log("Previous blog: ", blog);
+
+    const user = await request.user;
+
+    const blogUserId = blog.user.toString();
+    if (blogUserId !== user.id) {
+      return response
+        .status(401)
+        .json({ error: "Incorrect username or password" });
+    }
+
     const information = request.body;
-    information.user = user;
 
     const updatedBlog = await Blog.findByIdAndUpdate(
       request.params.id,
@@ -93,6 +105,7 @@ blogRouter.put("/:id", async (request, response, next) => {
         new: true,
       }
     );
+    console.log("Updated blog: ", updatedBlog);
     return response.json(updatedBlog).end();
   } catch (error) {
     next(error);

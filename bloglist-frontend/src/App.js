@@ -83,20 +83,12 @@ const App = () => {
     }
   };
 
-  const createBlog = async (event) => {
-    event.preventDefault();
+  const createBlog = async (blog) => {
     let notification = "";
     let isError = false;
     try {
-      const blog = { author: author, title: title, url: url };
-      console.log("Blog to be sent: ", blog);
       const newBlog = await blogService.create(blog);
       setBlogs([...blogs, newBlog]);
-
-      setAuthor("");
-      setTitle("");
-      setUrl("");
-      event.target.reset();
       notification = `Successfully created new blog ${newBlog.title}`;
     } catch (error) {
       notification = error.message;
@@ -136,12 +128,7 @@ const App = () => {
         <h2>Blogs</h2>
         <BlogList blogs={blogs} />
         <Togglable buttonName={"Create New Blog"}>
-          <NewBlog
-            setAuthor={setAuthor}
-            setTitle={setTitle}
-            setUrl={setUrl}
-            createBlog={createBlog}
-          />
+          <NewBlog addBlog={createBlog} />
         </Togglable>
       </section>
     );

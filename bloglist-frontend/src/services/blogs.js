@@ -13,10 +13,13 @@ const getAll = async () => {
 };
 
 const create = async (blog) => {
-  console.log("In createBlog: ", blog);
+  console.log("In blogService's create: ", blog);
   const config = {
     headers: { Authorization: token },
   };
+  console.log("About to post to: ", baseUrl);
+  console.log("With object ", blog);
+  console.log("And configuration: ", config);
   const response = await axios.post(baseUrl, blog, config);
   return response.data;
 };

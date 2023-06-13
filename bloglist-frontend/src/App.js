@@ -24,7 +24,7 @@ const App = () => {
       setBlogs(blogs);
     }
     fetchData();
-  }, [blogs]);
+  }, [user]);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("user");
@@ -96,6 +96,26 @@ const App = () => {
     }
   };
 
+  const modifyBlog = async (blogObj) => {
+    let notification = "";
+    let isError = false;
+
+    try {
+      const index = blogs.findIndex((blog) => blog.id === blogObj.id);
+      const newBlog = await blogService.modify(blogObj);
+      const newBlogList = [...blogs];
+      newBlogList[index] = newBlog;
+      setBlogs(newBlogList);
+      notification = `Successfully modified blog ${blogObj.title}`;
+    } catch (error) {
+      notification = error.message;
+      isError = true;
+      console.log(error);
+    } finally {
+      showNotification(notification, isError);
+    }
+  };
+
   const showLogin = () => {
     return (
       <Togglable buttonName={"Login"}>
@@ -123,7 +143,7 @@ const App = () => {
           </button>
         </em>
         <h2>Blogs</h2>
-        <BlogList blogs={blogs} />
+        <BlogList blogs={blogs} modifyLikes={modifyBlog} />
         <Togglable buttonName={"Create New Blog"}>
           <NewBlog addBlog={createBlog} />
         </Togglable>

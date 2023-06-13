@@ -1,5 +1,5 @@
 ###Get token:
-POST https://p4-blogs.onrender.com/api/login
+POST http://localhost:3003/api/login
 Content-Type: application/json
 
 {
@@ -10,20 +10,25 @@ Content-Type: application/json
 POST http://localhost:3003/api/blogs
 //POST https://p4-blogs.onrender.com/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDgyM2U0Nzk0NTA4NDhlN2RhMDk4MWUiLCJpYXQiOjE2ODY1MjgzMjQsImV4cCI6MTY4NjUzMTkyNH0.8rgjjf5iSoNZTvjLbOPCKgZxuhPkmSlmqIoakLoyAzo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDg4N2Q5NDEwYmZhMWVmYWI1MjZjZmUiLCJpYXQiOjE2ODY2NjY2NTUsImV4cCI6MTY4NjY3MDI1NX0.LyT63czJDu7ydhgxclNGHTeFaatBBOZ35pBOOEChX4M
 
 {
   "title": "React patterns",
   "url": "https://reactpatterns.com/",
   "likes": 7
 }
-###Get blogs (to use to delete a blog below)
-GEt https://p4-blogs.onrender.com/api/blogs
+###Get blogs (to use to delete and modify a blog below)
+//GET https://p4-blogs.onrender.com/api/blogs
+GET http://localhost:3003/api/blogs
+###Use a token to modify a blog
+PUT http://localhost:3003/api/blogs/:
+
 
 ###Delete a blog:
-DELETE https://p4-blogs.onrender.com/api/blogs/64823e6e9450848e7da09824
+//DELETE https://p4-blogs.onrender.com/api/blogs/64887db6f8aae7f3f4f54d23
+DELETE http://localhost:3003/api/blogs/64887f284afe242842607c22
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDgyM2U0Nzk0NTA4NDhlN2RhMDk4MWUiLCJpYXQiOjE2ODY1MDAxODgsImV4cCI6MTY4NjUwMzc4OH0.0CXRfvuanetb-RlnYo4zOIQLL8KhayklJTyt_-KYxhs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhbGFsYWxhIiwiaWQiOiI2NDg4N2Q5NDEwYmZhMWVmYWI1MjZjZmUiLCJpYXQiOjE2ODY2NjY2NTUsImV4cCI6MTY4NjY3MDI1NX0.LyT63czJDu7ydhgxclNGHTeFaatBBOZ35pBOOEChX4M
 
 {
   "title": "React patterns",

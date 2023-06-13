@@ -18,12 +18,11 @@ blogRouter.post("/", async (request, response, next) => {
     const information = request.body;
 
     if (!information || !information.title || !information.url) {
-      console.log("and goes in here");
       return response
         .status(400)
         .json({ error: "Title and Url must be provided" });
     }
-    console.log("shouldn't be here");
+
     if (!information.likes) {
       information.likes = 0;
     }
@@ -32,7 +31,7 @@ blogRouter.post("/", async (request, response, next) => {
 
     const newBlog = {
       title: information.title,
-      author: user.name,
+      author: information.author || user.name,
       url: information.url,
       likes: information.likes,
       user: user.id,
@@ -67,8 +66,11 @@ blogRouter.delete("/:id", async (request, response, next) => {
     }
 
     await Blog.findByIdAndRemove(request.params.id);
-
-    user.blogs = user.blogs.filter((blog) => blog !== blogUserId);
+    console.log("User blogs before: ", user.blogs);
+    user.blogs = user.blogs.filter(
+      (blog) => blog.toString() !== request.params.id
+    );
+    console.log("User blogs after: ", user.blogs);
     await user.save();
 
     return response.status(204).end();
@@ -79,9 +81,14 @@ blogRouter.delete("/:id", async (request, response, next) => {
 
 blogRouter.put("/:id", async (request, response, next) => {
   try {
+    const previousBlog = await Blog.findById(request.params.id);
+    const user = previousBlog.user;
+    const information = request.body;
+    information.user = user;
+
     const updatedBlog = await Blog.findByIdAndUpdate(
       request.params.id,
-      request.body,
+      information,
       {
         new: true,
       }

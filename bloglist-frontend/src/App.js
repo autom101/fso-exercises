@@ -116,6 +116,32 @@ const App = () => {
     }
   };
 
+  const removeBlog = async (blogObj) => {
+    let notification = "";
+    let isError = false;
+
+    if (
+      window.confirm(
+        `Are you sure you want to remove ${blogObj.title} by ${blogObj.author}?`
+      )
+    ) {
+      try {
+        const index = blogs.findIndex((blog) => blog.id === blogObj.id);
+        await blogService.remove(blogObj);
+        const newBlogList = [...blogs];
+        newBlogList.splice(index, 1);
+        setBlogs(newBlogList);
+        notification = `Successfully deleted blog ${blogObj.title}`;
+      } catch (error) {
+        notification = error.message;
+        isError = true;
+        console.log(error);
+      } finally {
+        showNotification(notification, isError);
+      }
+    }
+  };
+
   const showLogin = () => {
     return (
       <Togglable buttonName={"Login"}>
@@ -143,7 +169,11 @@ const App = () => {
           </button>
         </em>
         <h2>Blogs</h2>
-        <BlogList blogs={blogs} modifyLikes={modifyBlog} />
+        <BlogList
+          blogs={blogs}
+          removeBlog={removeBlog}
+          modifyLikes={modifyBlog}
+        />
         <Togglable buttonName={"Create New Blog"}>
           <NewBlog addBlog={createBlog} />
         </Togglable>

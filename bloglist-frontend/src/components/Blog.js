@@ -1,6 +1,6 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState } from "react";
 
-const Blog = forwardRef(({ blog, modifyLikes }, refs) => {
+const Blog = ({ blog, modifyLikes, remove }) => {
   const [showAll, setShowAll] = useState(false);
   const [likeCount, setLikeCount] = useState(blog.likes);
 
@@ -15,7 +15,9 @@ const Blog = forwardRef(({ blog, modifyLikes }, refs) => {
     modifyLikes(blog);
   };
 
-  useImperativeHandle(refs, changeLikes);
+  const deleteSelf = () => {
+    remove(blog);
+  };
 
   const infoShown = () => {
     if (!showAll) {
@@ -36,12 +38,13 @@ const Blog = forwardRef(({ blog, modifyLikes }, refs) => {
             likes: {likeCount} <button onClick={changeLikes}>like</button>
           </p>
           <p> {blog.user.name}</p>
+          <button onClick={deleteSelf}>Delete</button>
         </>
       );
     }
   };
 
   return <div className="individual-blog">{infoShown()}</div>;
-});
+};
 
 export default Blog;

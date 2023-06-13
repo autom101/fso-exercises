@@ -27,6 +27,11 @@ ul {
   gap: 1rem;
 }
 
+.individual-blog {
+  width: max-content;
+  margin-bottom: none;
+}
+
 form div {
   display: flex;
   gap: 1rem;

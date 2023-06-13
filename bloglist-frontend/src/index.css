@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
+.notification {
+  margin: 0 auto;
+  width: max-content;
+  height: 2rem;
+  line-height: 2rem;
+  font-size: 32px;
+  font-style: italic;
+  font-weight: 1000;
+  background-color: #fef9c3;
+}
+
+.success-notification {
+  color: #22c55e;
+}
+
+.error-notification {
+  color: red;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+form div {
+  display: flex;
+  gap: 1rem;
+}
+
+button:hover {
+  cursor: pointer;
+  scale: 1.03;
+}

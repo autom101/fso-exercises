@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 blogRouter.get("/", async (request, response, next) => {
   try {
     const blogs = await Blog.find({}).populate("user");
-    response.json(blogs);
+    return response.json(blogs);
   } catch (error) {
     next(error);
   }
@@ -14,11 +14,17 @@ blogRouter.get("/", async (request, response, next) => {
 
 blogRouter.post("/", async (request, response, next) => {
   try {
+    console.log("request arrives here: ", request.body);
     const information = request.body;
 
-    if (!information.title || !information.url) {
-      response.status(400).end();
-    } else if (!information.likes) {
+    if (!information || !information.title || !information.url) {
+      console.log("and goes in here");
+      return response
+        .status(400)
+        .json({ error: "Title and Url must be provided" });
+    }
+    console.log("shouldn't be here");
+    if (!information.likes) {
       information.likes = 0;
     }
 
@@ -38,7 +44,7 @@ blogRouter.post("/", async (request, response, next) => {
     user.blogs = [...user.blogs, returnedObj._id];
     await user.save();
 
-    response.status(201).json(returnedObj);
+    return response.status(201).json(returnedObj);
   } catch (error) {
     next(error);
   }
@@ -65,7 +71,7 @@ blogRouter.delete("/:id", async (request, response, next) => {
     user.blogs = user.blogs.filter((blog) => blog !== blogUserId);
     await user.save();
 
-    response.status(204).end();
+    return response.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -80,7 +86,7 @@ blogRouter.put("/:id", async (request, response, next) => {
         new: true,
       }
     );
-    response.json(updatedBlog).end();
+    return response.json(updatedBlog).end();
   } catch (error) {
     next(error);
   }

@@ -26,7 +26,7 @@ loginRouter.post("/", async (request, response, next) => {
       expiresIn: 3600,
     });
 
-    response
+    return response
       .status(201)
       .send({ token: token, username: username, name: user.name });
   } catch (error) {

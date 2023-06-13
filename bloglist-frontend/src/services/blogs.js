@@ -21,6 +21,7 @@ const create = async (blog) => {
   console.log("With object ", blog);
   console.log("And configuration: ", config);
   const response = await axios.post(baseUrl, blog, config);
+  console.log("returned: ", response);
   return response.data;
 };
 

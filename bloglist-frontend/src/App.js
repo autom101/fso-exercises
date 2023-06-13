@@ -17,17 +17,14 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  //New blog states:
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
-  const [title, setTitle] = useState("");
 
   useEffect(() => {
     async function fetchData() {
-      await blogService.getAll().then((blogs) => setBlogs(blogs));
+      const blogs = await blogService.getAll();
+      setBlogs(blogs);
     }
     fetchData();
-  }, []);
+  }, [blogs]);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("user");

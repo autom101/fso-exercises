@@ -9,7 +9,7 @@ const Blog = ({ blog }) => {
   };
 
   const infoShown = () => {
-    if (showAll) {
+    if (!showAll) {
       return (
         <>
           {blog.title} by {blog.author}{" "}

@@ -7,12 +7,12 @@ import LoginForm from "./components/Login";
 import Notification from "./components/Notification";
 import BlogList from "./components/BlogList";
 import NewBlog from "./components/NewBlog";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [notiMessage, setNotiMessage] = useState("");
   const [errorClass, setErrorClass] = useState("");
-  const [hideLogin, setHideLogin] = useState("");
   //User states:
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
@@ -109,11 +109,13 @@ const App = () => {
 
   const showLogin = () => {
     return (
-      <LoginForm
-        handleLogin={handleLogin}
-        setPassword={setPassword}
-        setUsername={setUsername}
-      />
+      <Togglable buttonName={"Login"}>
+        <LoginForm
+          handleLogin={handleLogin}
+          setPassword={setPassword}
+          setUsername={setUsername}
+        />
+      </Togglable>
     );
   };
 
@@ -133,18 +135,21 @@ const App = () => {
         </em>
         <h2>Blogs</h2>
         <BlogList blogs={blogs} />
-        <NewBlog
-          setAuthor={setAuthor}
-          setTitle={setTitle}
-          setUrl={setUrl}
-          createBlog={createBlog}
-        />
+        <Togglable buttonName={"Create New Blog"}>
+          <NewBlog
+            setAuthor={setAuthor}
+            setTitle={setTitle}
+            setUrl={setUrl}
+            createBlog={createBlog}
+          />
+        </Togglable>
       </section>
     );
   };
 
   return (
     <div>
+      <h1>Blog List</h1>
       <Notification message={notiMessage} errorClass={errorClass} />
       {!user && showLogin()}
       {user && showBlogs()}

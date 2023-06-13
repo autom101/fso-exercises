@@ -1,7 +1,5 @@
 const blogRouter = require("express").Router();
 const Blog = require("../models/blog");
-const User = require("../models/user");
-const jwt = require("jsonwebtoken");
 
 blogRouter.get("/", async (request, response, next) => {
   try {
@@ -43,6 +41,7 @@ blogRouter.post("/", async (request, response, next) => {
     user.blogs = [...user.blogs, returnedObj._id];
     await user.save();
 
+    await returnedObj.populate("user");
     return response.status(201).json(returnedObj);
   } catch (error) {
     next(error);
@@ -56,21 +55,14 @@ blogRouter.delete("/:id", async (request, response, next) => {
       return response.status(404).json({ error: "No such blog exists" });
     }
 
+    console.log("Blog to delete: ", blog);
+
     const user = await request.user;
 
-    const blogUserId = blog.user.toString();
-    if (blogUserId !== user.id) {
-      return response
-        .status(401)
-        .json({ error: "Incorrect username or password" });
-    }
-
     await Blog.findByIdAndRemove(request.params.id);
-    console.log("User blogs before: ", user.blogs);
     user.blogs = user.blogs.filter(
       (blog) => blog.toString() !== request.params.id
     );
-    console.log("User blogs after: ", user.blogs);
     await user.save();
 
     return response.status(204).end();
@@ -85,18 +77,9 @@ blogRouter.put("/:id", async (request, response, next) => {
     if (!blog) {
       return response.status(404).json({ error: "No such blog exists" });
     }
-    console.log("Previous blog: ", blog);
-
-    const user = await request.user;
-
-    const blogUserId = blog.user.toString();
-    if (blogUserId !== user.id) {
-      return response
-        .status(401)
-        .json({ error: "Incorrect username or password" });
-    }
 
     const information = request.body;
+    information.user = request.user;
 
     const updatedBlog = await Blog.findByIdAndUpdate(
       request.params.id,
@@ -105,6 +88,7 @@ blogRouter.put("/:id", async (request, response, next) => {
         new: true,
       }
     );
+    await updatedBlog.populate("user");
     console.log("Updated blog: ", updatedBlog);
     return response.json(updatedBlog).end();
   } catch (error) {

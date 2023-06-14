@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import { useState } from "react";
 const NewBlog = ({ addBlog }) => {
   const [author, setAuthor] = useState("");
@@ -28,6 +29,7 @@ const NewBlog = ({ addBlog }) => {
             id="blog-title"
             type="text"
             name="title"
+            placeholder="enter title here"
             onChange={({ target }) => {
               setTitle(target.value);
             }}
@@ -40,6 +42,7 @@ const NewBlog = ({ addBlog }) => {
             id="blog-author"
             type="text"
             name="author"
+            placeholder="enter author here"
             onChange={({ target }) => {
               setAuthor(target.value);
             }}
@@ -52,6 +55,7 @@ const NewBlog = ({ addBlog }) => {
             id="blog-url"
             type="text"
             name="url"
+            placeholder="enter url here"
             onChange={({ target }) => {
               setUrl(target.value);
             }}

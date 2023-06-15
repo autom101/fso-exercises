@@ -35,7 +35,10 @@ const Blog = ({ blog, modifyLikes, remove }) => {
           <p> {blog.url}</p>
           <p>
             {" "}
-            likes: {likeCount} <button onClick={changeLikes}>like</button>
+            likes: {likeCount}{" "}
+            <button className="like-button" onClick={changeLikes}>
+              like
+            </button>
           </p>
           <p> {blog.user.name}</p>
           <button onClick={deleteSelf}>Delete</button>

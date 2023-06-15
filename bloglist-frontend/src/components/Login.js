@@ -25,7 +25,9 @@ const LoginForm = ({ handleLogin, setUsername, setPassword }) => {
           }}
         ></input>
         <br></br>
-        <button type="submit">Login</button>
+        <button id="submit-login" type="submit">
+          Login
+        </button>
       </form>
     </>
   );

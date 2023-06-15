@@ -81,11 +81,17 @@ describe("Bloglist app", function () {
           cy.contains("a new title by a new author");
         });
 
-        it.only("a blog can be liked", function () {
+        it("a blog can be liked", function () {
           cy.contains("a new title by a new author").contains("Expand").click();
           cy.contains("a new title by a new author").contains("likes: 0");
           cy.get(".like-button").click();
           cy.contains("a new title by a new author").contains("likes: 1");
+        });
+
+        it.only("a blog can be deleted by the user who created it", function () {
+          cy.contains("a new title by a new author").contains("Expand").click();
+          cy.contains("Delete").click();
+          cy.should("not.contain", "a new title by a new author");
         });
       });
     });

@@ -135,16 +135,37 @@ describe("Bloglist app", function () {
       cy.request("POST", "http://localhost:3003/api/login", user2).then(
         ({ body }) => {
           localStorage.setItem("user", JSON.stringify(body));
+          cy.request({
+            url: "http://localhost:3003/api/blogs",
+            method: "POST",
+            body: {
+              title: "a new title",
+              url: "a new url",
+              likes: 6,
+              author: "a new author",
+            },
+            headers: {
+              Authorization: `Bearer ${body.token}`,
+            },
+          });
           cy.visit("http://localhost:3000");
         }
       );
     });
 
-    it.only("Checking", function () {
+    it("a blog created by a different user cannot be deleted", function () {
       cy.contains("React patterns by User1")
         .contains("Expand")
         .click()
         .should("not.contain", "Delete");
+    });
+
+    it.only("A blog with lower likes is on the bottom", function () {
+      cy.get(".blog").eq(0).contains("React patterns by User1");
+      cy.contains("a new title by a new author").contains("Expand").click();
+      cy.contains("like").click();
+      cy.contains("like").click();
+      cy.get(".blog").eq(0).contains("a new title by a new author");
     });
   });
 });

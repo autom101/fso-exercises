@@ -9,7 +9,7 @@ const BlogList = ({ blogs, modifyLikes, removeBlog, currentUser }) => {
     <>
       <ul>
         {blogs.map((blog) => (
-          <li key={blog.id}>
+          <li key={blog.id} className="blog">
             <Blog
               currentUser={currentUser}
               key={blog.id}

@@ -40,23 +40,38 @@ describe("Bloglist app", function () {
 
       cy.contains("Incorrect credentials!");
     });
+  });
 
-    describe("when logged in", function () {
+  describe("when logged in", function () {
+    beforeEach(function () {
+      const user1 = {
+        username: "user1",
+        name: "User1",
+        password: "password1",
+      };
+      cy.request("POST", "http://localhost:3003/api/login", user1).then(
+        ({ body }) => {
+          console.log(body);
+          localStorage.setItem("user", JSON.stringify(body));
+          cy.visit("http://localhost:3000");
+        }
+      );
+    });
+
+    it("a blog can be created", function () {
+      cy.contains("Create New Blog").as("createBlogButton");
+      cy.get("@createBlogButton").click();
+
+      cy.get("#blog-title").type("a new title");
+      cy.get("#blog-author").type("a new author");
+      cy.get("#blog-url").type("a new url");
+
+      cy.get("#create-blog-submit").click();
+      cy.contains("a new title by a new author");
+    });
+
+    describe("and a new blog is created", function () {
       beforeEach(function () {
-        const user1 = {
-          username: "user1",
-          name: "User1",
-          password: "password1",
-        };
-        cy.request("POST", "http://localhost:3003/api/login", user1).then(
-          ({ body }) => {
-            localStorage.setItem("user", JSON.stringify(body));
-            cy.visit("http://localhost:3000");
-          }
-        );
-      });
-
-      it("a blog can be created", function () {
         cy.contains("Create New Blog").as("createBlogButton");
         cy.get("@createBlogButton").click();
 
@@ -68,32 +83,68 @@ describe("Bloglist app", function () {
         cy.contains("a new title by a new author");
       });
 
-      describe("and a new blog is created", function () {
-        beforeEach(function () {
-          cy.contains("Create New Blog").as("createBlogButton");
-          cy.get("@createBlogButton").click();
-
-          cy.get("#blog-title").type("a new title");
-          cy.get("#blog-author").type("a new author");
-          cy.get("#blog-url").type("a new url");
-
-          cy.get("#create-blog-submit").click();
-          cy.contains("a new title by a new author");
-        });
-
-        it("a blog can be liked", function () {
-          cy.contains("a new title by a new author").contains("Expand").click();
-          cy.contains("a new title by a new author").contains("likes: 0");
-          cy.get(".like-button").click();
-          cy.contains("a new title by a new author").contains("likes: 1");
-        });
-
-        it.only("a blog can be deleted by the user who created it", function () {
-          cy.contains("a new title by a new author").contains("Expand").click();
-          cy.contains("Delete").click();
-          cy.should("not.contain", "a new title by a new author");
-        });
+      it("a blog can be liked", function () {
+        cy.contains("a new title by a new author").contains("Expand").click();
+        cy.contains("a new title by a new author").contains("likes: 0");
+        cy.get(".like-button").click();
+        cy.contains("a new title by a new author").contains("likes: 1");
       });
+
+      it("a blog can be deleted by the user who created it", function () {
+        cy.contains("a new title by a new author").contains("Expand").click();
+        cy.contains("Delete").click();
+        cy.should("not.contain", "a new title by a new author");
+      });
+    });
+  });
+
+  describe("when a different user is logged in and a blog already exists", function () {
+    beforeEach(function () {
+      const user1 = {
+        username: "user1",
+        name: "User1",
+        password: "password1",
+      };
+      cy.request("POST", "http://localhost:3003/api/login", user1).then(
+        ({ body }) => {
+          console.log(body);
+          localStorage.setItem("user", JSON.stringify(body));
+          cy.visit("http://localhost:3000");
+
+          cy.request({
+            url: "http://localhost:3003/api/blogs",
+            method: "POST",
+            body: {
+              title: "React patterns",
+              url: "https://reactpatterns.com/",
+              likes: 7,
+            },
+            headers: {
+              Authorization: `Bearer ${body.token}`,
+            },
+          });
+        }
+      );
+
+      cy.contains("Logout").click();
+      const user2 = {
+        username: "user2",
+        name: "User2",
+        password: "password2",
+      };
+      cy.request("POST", "http://localhost:3003/api/login", user2).then(
+        ({ body }) => {
+          localStorage.setItem("user", JSON.stringify(body));
+          cy.visit("http://localhost:3000");
+        }
+      );
+    });
+
+    it.only("Checking", function () {
+      cy.contains("React patterns by User1")
+        .contains("Expand")
+        .click()
+        .should("not.contain", "Delete");
     });
   });
 });

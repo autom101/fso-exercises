@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Blog = ({ blog, modifyLikes, remove }) => {
+const Blog = ({ blog, currentUser, modifyLikes, remove }) => {
   const [showAll, setShowAll] = useState(false);
   const [likeCount, setLikeCount] = useState(blog.likes);
 
@@ -28,6 +28,13 @@ const Blog = ({ blog, modifyLikes, remove }) => {
         </>
       );
     } else {
+      const showDeleteButton = () => {
+        if (blog.user.name === currentUser.name) {
+          return <button onClick={deleteSelf}>Delete</button>;
+        } else {
+          return null;
+        }
+      };
       return (
         <>
           {blog.title} by {blog.author}{" "}
@@ -41,7 +48,7 @@ const Blog = ({ blog, modifyLikes, remove }) => {
             </button>
           </p>
           <p> {blog.user.name}</p>
-          <button onClick={deleteSelf}>Delete</button>
+          {showDeleteButton()}
         </>
       );
     }

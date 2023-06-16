@@ -170,6 +170,7 @@ const App = () => {
         </em>
         <h2>Blogs</h2>
         <BlogList
+          currentUser={user}
           blogs={blogs}
           removeBlog={removeBlog}
           modifyLikes={modifyBlog}

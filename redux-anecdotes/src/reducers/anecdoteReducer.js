@@ -20,7 +20,6 @@ const asObject = (anecdote) => {
 const initialState = anecdotesAtStart.map(asObject);
 
 const reducer = (state = initialState, action) => {
-  console.log("old state: ", state);
   switch (action.type) {
     case "VOTE": {
       const id = action.payload.id;
@@ -33,8 +32,12 @@ const reducer = (state = initialState, action) => {
             }
           : anecdote
       );
-      console.log("new state: ", newState);
       return newState;
+    }
+    case "NEW_ANECDOTE": {
+      const newAnecdote = action.payload;
+      console.log("In here as: ", newAnecdote);
+      return [...state, newAnecdote];
     }
     default: {
       return state;

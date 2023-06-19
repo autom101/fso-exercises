@@ -73,10 +73,7 @@ const App = () => {
               clearFields();
             })
             .catch((error) => {
-              showNotification(
-                `${objToChange.name} has already been removed from the server`,
-                true
-              );
+              showNotification(error.response.data.error, true);
               console.log(
                 `Error changing phone number for ${objToChange.name}:`,
                 error
@@ -103,6 +100,7 @@ const App = () => {
         })
         .catch((error) => {
           console.log(`Error adding ${newName} to phonebook:`, error);
+          showNotification(error.response.data.error, true);
         });
     }
     clearFields();
@@ -137,6 +135,7 @@ const App = () => {
         })
         .catch((error) => {
           console.log(`Error deleting ${name} from phone book:`, error);
+          showNotification(error.response.data.error, true);
         });
     }
   };

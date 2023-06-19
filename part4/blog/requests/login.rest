@@ -1,3 +1,11 @@
+###
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "password1"
+}
 ###Get token:
 POST http://localhost:3003/api/login
 Content-Type: application/json

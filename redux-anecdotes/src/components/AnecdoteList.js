@@ -10,6 +10,7 @@ const AnecdoteList = () => {
   const dispatch = useDispatch();
   return (
     <div>
+      <h2>create new</h2>
       {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
